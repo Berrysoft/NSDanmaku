@@ -1,31 +1,21 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using NSDanmaku.Model;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
-
-//https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace NSDanmaku.Controls
 {
@@ -48,7 +38,7 @@ namespace NSDanmaku.Controls
         }
         // Using a DependencyProperty as the backing store for sizeZoom.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty sizeZoomProperty =
-            DependencyProperty.Register("sizeZoom", typeof(double), typeof(Danmaku), new PropertyMetadata(1.0, OnSizeZoomChanged));
+            DependencyProperty.Register(nameof(sizeZoom), typeof(double), typeof(Danmaku), new PropertyMetadata(1.0, OnSizeZoomChanged));
 
         private static void OnSizeZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -335,10 +325,30 @@ namespace NSDanmaku.Controls
 
         }
 
+        private TextBlock CreateControlTextBlock(DanmakuModel model)
+        {
+            TextBlock tx = new TextBlock();
+
+            tx.Text = model.text;
+            if (bold)
+            {
+                tx.FontWeight = FontWeights.Bold;
+            }
+            if (!string.IsNullOrEmpty(font))
+            {
+                tx.FontFamily = new FontFamily(font);
+            }
+            tx.Foreground = new SolidColorBrush(model.color);
+            //弹幕大小
+            tx.FontSize = model.size * sizeZoom;
+
+            return tx;
+        }
+
         private Grid CreateControlShadow(DanmakuModel model)
         {
             //创建基础控件
-            TextBlock tx = new TextBlock();
+            TextBlock tx = CreateControlTextBlock(model);
             DropShadowPanel dropShadowPanel = new DropShadowPanel()
             {
                 BlurRadius = 6,
@@ -348,25 +358,7 @@ namespace NSDanmaku.Controls
                 Color = SetBorder(model.color)
             };
 
-
             Grid grid = new Grid();
-
-
-
-            tx.Text = model.text;
-            if (bold)
-            {
-                tx.FontWeight = FontWeights.Bold;
-            }
-            if (font!="")
-            {
-                tx.FontFamily = new FontFamily(font);
-            }
-            tx.Foreground = new SolidColorBrush(model.color);
-            //弹幕大小
-            double size = model.size * sizeZoom;
-            tx.FontSize = size;
-
 
             dropShadowPanel.Content = tx;
 
@@ -377,32 +369,11 @@ namespace NSDanmaku.Controls
         private Grid CreateControlBorder(DanmakuModel model)
         {
             //创建基础控件
-            TextBlock tx = new TextBlock();
-            TextBlock tx2 = new TextBlock();
+            TextBlock tx = CreateControlTextBlock(model);
+            TextBlock tx2 = CreateControlTextBlock(model);
             Grid grid = new Grid();
 
-
-            tx2.Text = model.text;
-            tx.Text = model.text;
-            if (bold)
-            {
-                tx.FontWeight = FontWeights.Bold;
-                tx2.FontWeight = FontWeights.Bold;
-            }
-            if (font != "")
-            {
-                tx.FontFamily = new FontFamily(font);
-                tx2.FontFamily = new FontFamily(font);
-            }
             tx2.Foreground = new SolidColorBrush(SetBorder(model.color));
-            tx.Foreground = new SolidColorBrush(model.color);
-            //弹幕大小
-            double size = model.size * sizeZoom;
-
-            tx2.FontSize = size;
-            tx.FontSize = size;
-
-            tx2.Margin = new Thickness(1);
             //grid包含弹幕文本信息
 
             grid.Children.Add(tx2);
@@ -413,24 +384,9 @@ namespace NSDanmaku.Controls
         private Grid CreateControlNoBorder(DanmakuModel model)
         {
             //创建基础控件
-            TextBlock tx = new TextBlock();
+            TextBlock tx = CreateControlTextBlock(model);
 
             Grid grid = new Grid();
-
-            tx.Text = model.text;
-            if (bold)
-            {
-                tx.FontWeight = FontWeights.Bold;
-            }
-            if (font != "")
-            {
-                tx.FontFamily = new FontFamily(font);
-            }
-            tx.Foreground = new SolidColorBrush(model.color);
-            //弹幕大小
-            double size = model.size * sizeZoom;
-
-            tx.FontSize = size;
 
             grid.Children.Add(tx);
             grid.Tag = model;
@@ -522,125 +478,89 @@ namespace NSDanmaku.Controls
             }
         }
 
-
+        private int currentTopRow = 0;
         private int ComputeTopRow()
         {
-            var rows = 0;
             var max = grid_Top.RowDefinitions.Count;
-            if (notHideSubtitle && grid_Top.RowDefinitions.Count >= 5)
-            {
-
-                max = grid_Top.RowDefinitions.Count - 3;
-            }
-            for (int i = 0; i < max; i++)
-            {
-                rows = i;
-                bool has = false;
-                foreach (Grid item in grid_Top.Children)
-                {
-                    var row = Grid.GetRow(item);
-                    if (row == i)
-                    {
-                        has = true;
-                        break;
-                    }
-                }
-                if (!has)
-                {
-                    return rows;
-                }
-                if (i == max - 1)
-                {
-                    return -1;
-                }
-            }
-            return rows;
-        }
-        private int ComputeBottomRow()
-        {
-
-            var rows = grid_Bottom.RowDefinitions.Count;
-            if (rows == 0)
+            if (max == 0)
             {
                 SetRows();
-                rows = grid_Bottom.RowDefinitions.Count - 1;
+                max = grid_Top.RowDefinitions.Count;
             }
-            for (int i = grid_Bottom.RowDefinitions.Count - 1; i >= 0; i--)
+            if (notHideSubtitle)
             {
-                rows = i;
-                bool has = false;
-                foreach (Grid item in grid_Bottom.Children)
+                max -= 3;
+            }
+            for (int i = 0; i <= currentTopRow; i++)
+            {
+                var last = grid_Top.Children.LastOrDefault(x => Grid.GetRow(x as Grid) == i) as Grid;
+                if (last == null)
                 {
-                    var row = Grid.GetRow(item);
-                    if (row == i)
-                    {
-                        has = true;
-                        break;
-                    }
-                }
-                if (!has)
-                {
-                    return rows;
+                    return i;
                 }
             }
-            return rows;
+            currentTopRow++;
+            currentTopRow %= max;
+            return currentTopRow;
         }
+
+        private int currentBottomRow = 0;
+        private int ComputeBottomRow()
+        {
+            var max = grid_Bottom.RowDefinitions.Count;
+            if (max == 0)
+            {
+                SetRows();
+                max = grid_Bottom.RowDefinitions.Count;
+            }
+            if (notHideSubtitle)
+            {
+                max -= 3;
+            }
+            for (int i = max - 1; i >= currentBottomRow; i++)
+            {
+                var last = grid_Bottom.Children.LastOrDefault(x => Grid.GetRow(x as Grid) == i) as Grid;
+                if (last == null)
+                {
+                    return i;
+                }
+            }
+            currentBottomRow += max - 1;
+            currentBottomRow %= max;
+            return currentBottomRow;
+        }
+
+        private int currentRow = 0;
         private int ComputeRollRow(Grid item)
         {
-            var rows = 0;
-
+            double num = 0.8;
+            if ((item.Tag as DanmakuModel).text.Length > 15)
+            {
+                num = 0.6;
+            }
             var max = grid_Roll.RowDefinitions.Count;
-            if (notHideSubtitle )
+            if (max == 0)
             {
-                max = grid_Roll.RowDefinitions.Count / 2;
+                SetRows();
+                max = grid_Roll.RowDefinitions.Count;
             }
-            for (int i = 0; i < max; i++)
+            if (notHideSubtitle)
             {
-                rows = i;
-                bool has = false;
-                var ls = grid_Roll.Children.Where(x => Grid.GetRow((x as Grid)) == i);
-                if (ls.Count() != 0)
+                max -= 3;
+            }
+            for (int i = 0; i <= currentTopRow; i++)
+            {
+                var last = grid_Roll.Children.LastOrDefault(x => Grid.GetRow(x as Grid) == i) as Grid;
+                if (last == null || (last.RenderTransform as TranslateTransform).X <= grid_Roll.ActualWidth * num)
                 {
-                    var last = ls.Last() as Grid;
-                    double num = 0.8;
-                    if ((item.Tag as DanmakuModel).text.Length > 15)
-                    {
-                        num = 0.6;
-                    }
-                    if ((last.RenderTransform as TranslateTransform).X > grid_Roll.ActualWidth * num)
-                    {
-                        has = true;
-                    }
-                }
-
-
-
-
-                //foreach (Grid item in grid_Roll.Children)
-                //{
-                //    var row = Grid.GetRow(item);
-
-                //    if (row == i)
-                //    {
-                //        if ((item.RenderTransform as TranslateTransform).X > grid_Roll.ActualWidth / 1.2)
-                //        {
-                //            has = true;
-                //            break;
-                //        }
-                //    }
-                //}
-
-                if (!has)
-                {
-                    return rows;
-                }
-                if (i == max - 1)
-                {
-                    return -1;
+                    return i;
                 }
             }
-            return rows;
+            currentRow++;
+            currentRow %= max;
+            return currentRow;
         }
+
         /// <summary>
         /// 添加滚动弹幕
         /// </summary>
@@ -700,17 +620,13 @@ namespace NSDanmaku.Controls
             Storyboard.SetTargetProperty(myDoubleAnimationX, "X");
             rollStoryList.Add(moveStoryboard);
 
-            moveStoryboard.Completed += new EventHandler<object>((senders, obj) =>
+            moveStoryboard.Completed += (senders, obj) =>
             {
-
                 grid_Roll.Children.Remove(grid);
                 grid = null;
                 rollStoryList.Remove(moveStoryboard);
-
-            });
+            };
             moveStoryboard.Begin();
-
-
         }
 
         /// <summary>
@@ -750,17 +666,13 @@ namespace NSDanmaku.Controls
             Storyboard.SetTargetProperty(myDoubleAnimationX, "X");
             rollStoryList.Add(moveStoryboard);
 
-            moveStoryboard.Completed += new EventHandler<object>((senders, obj) =>
+            moveStoryboard.Completed += (senders, obj) =>
             {
-
                 grid_Roll.Children.Remove(grid);
                 grid = null;
                 rollStoryList.Remove(moveStoryboard);
-
-            });
+            };
             moveStoryboard.Begin();
-
-
         }
 
 
@@ -835,13 +747,12 @@ namespace NSDanmaku.Controls
             Storyboard.SetTargetProperty(myDoubleAnimationX, "X");
             rollStoryList.Add(moveStoryboard);
 
-            moveStoryboard.Completed += new EventHandler<object>((senders, obj) =>
+            moveStoryboard.Completed += (senders, obj) =>
             {
                 grid_Roll.Children.Remove(grid);
                 grid = null;
                 rollStoryList.Remove(moveStoryboard);
-
-            });
+            };
             moveStoryboard.Begin();
         }
         /// <summary>
