@@ -24,21 +24,21 @@ namespace NSDanmaku.Controls
         public Danmaku()
         {
             this.InitializeComponent();
-            notHideSubtitle = false;
-            bold = false;
-            font = "";
+            NotHideSubtitle = false;
+            Bold = false;
+            Font = string.Empty;
         }
         /// <summary>
         /// 字体大小缩放，电脑推荐默认1.0，手机推荐0.5
         /// </summary>
-        public double sizeZoom
+        public double SizeZoom
         {
-            get { return (double)GetValue(sizeZoomProperty); }
-            set { SetValue(sizeZoomProperty, value); }
+            get => (double)GetValue(SizeZoomProperty);
+            set => SetValue(SizeZoomProperty, value);
         }
         // Using a DependencyProperty as the backing store for sizeZoom.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty sizeZoomProperty =
-            DependencyProperty.Register(nameof(sizeZoom), typeof(double), typeof(Danmaku), new PropertyMetadata(1.0, OnSizeZoomChanged));
+        public static readonly DependencyProperty SizeZoomProperty =
+            DependencyProperty.Register(nameof(SizeZoom), typeof(double), typeof(Danmaku), new PropertyMetadata(1.0, OnSizeZoomChanged));
 
         private static void OnSizeZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -51,7 +51,6 @@ namespace NSDanmaku.Controls
             {
                 value = 0.1;
             }
-            //sizeZoom = value;
 
             ((Danmaku)d).SetFontSizeZoom(value);
         }
@@ -67,10 +66,9 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * sizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
                     }
                 }
-
             }
             foreach (var item in grid_Top.Children)
             {
@@ -80,10 +78,9 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * sizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
                     }
                 }
-
             }
             foreach (var item in grid_Bottom.Children)
             {
@@ -93,25 +90,24 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * sizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
                     }
                 }
-
             }
         }
 
         /// <summary>
         /// 滚动弹幕速度
         /// </summary>
-        public int speed
+        public int Speed
         {
-            get { return (int)GetValue(speedProperty); }
-            set { SetValue(speedProperty, value); }
+            get => (int)GetValue(SpeedProperty);
+            set => SetValue(SpeedProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for speed.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty speedProperty =
-            DependencyProperty.Register("speed", typeof(int), typeof(Danmaku), new PropertyMetadata(10, OnSpeedChanged));
+        public static readonly DependencyProperty SpeedProperty =
+            DependencyProperty.Register(nameof(Speed), typeof(int), typeof(Danmaku), new PropertyMetadata(10, OnSpeedChanged));
         private static void OnSpeedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var value = Convert.ToInt32(e.NewValue);
@@ -123,59 +119,53 @@ namespace NSDanmaku.Controls
         }
         public void SetSpeed(int value)
         {
-            speed = value;
-            //foreach (var item in rollStoryList)
-            //{
-            //    item.Duration = new Duration(TimeSpan.FromSeconds(value));
-            //}
+            Speed = value;
         }
 
-
-
-        public bool bold
+        public bool Bold
         {
-            get { return (bool)GetValue(boldProperty); }
-            set { SetValue(boldProperty, value); }
+            get => (bool)GetValue(BoldProperty);
+            set => SetValue(BoldProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for bold.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty boldProperty =
-            DependencyProperty.Register("bold", typeof(bool), typeof(Danmaku), new PropertyMetadata(0));
+        public static readonly DependencyProperty BoldProperty =
+            DependencyProperty.Register(nameof(Bold), typeof(bool), typeof(Danmaku), new PropertyMetadata(0));
 
 
 
-        public string font
+        public string Font
         {
-            get { return (string)GetValue(fontProperty); }
-            set { SetValue(fontProperty, value); }
+            get => (string)GetValue(FontProperty);
+            set => SetValue(FontProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for font.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty fontProperty =
-            DependencyProperty.Register("font", typeof(string), typeof(Danmaku), new PropertyMetadata(0));
+        public static readonly DependencyProperty FontProperty =
+            DependencyProperty.Register(nameof(Font), typeof(string), typeof(Danmaku), new PropertyMetadata(0));
 
 
         /// <summary>
         /// 弹幕样式
         /// </summary>
-        public DanmakuBorderStyle borderStyle
+        public DanmakuBorderStyle BorderStyle
         {
-            get { return (DanmakuBorderStyle)GetValue(borderStyleProperty); }
-            set { SetValue(borderStyleProperty, value); }
+            get => (DanmakuBorderStyle)GetValue(BorderStyleProperty);
+            set => SetValue(BorderStyleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for borderStyle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty borderStyleProperty =
-            DependencyProperty.Register("borderStyle", typeof(DanmakuBorderStyle), typeof(Danmaku), new PropertyMetadata(DanmakuBorderStyle.Default));
+        public static readonly DependencyProperty BorderStyleProperty =
+            DependencyProperty.Register(nameof(BorderStyle), typeof(DanmakuBorderStyle), typeof(Danmaku), new PropertyMetadata(DanmakuBorderStyle.Default));
 
 
 
         /// <summary>
         /// 弹幕动画管理
         /// </summary>
-        List<Storyboard> topBottomStoryList = new List<Storyboard>();
-        List<Storyboard> rollStoryList = new List<Storyboard>();
-        List<Storyboard> positionStoryList = new List<Storyboard>();
+        private readonly List<Storyboard> topBottomStoryList = new List<Storyboard>();
+        private readonly List<Storyboard> rollStoryList = new List<Storyboard>();
+        private readonly List<Storyboard> positionStoryList = new List<Storyboard>();
 
         /// <summary>
         /// 弹幕模式
@@ -185,23 +175,22 @@ namespace NSDanmaku.Controls
         /// <summary>
         /// 防挡字幕
         /// </summary>
-        public bool notHideSubtitle
+        public bool NotHideSubtitle
         {
-            get { return (bool)GetValue(notHideSubtitleProperty); }
-            set { SetValue(notHideSubtitleProperty, value); }
+            get => (bool)GetValue(NotHideSubtitleProperty);
+            set => SetValue(NotHideSubtitleProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for notHideSubtitle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty notHideSubtitleProperty =
-            DependencyProperty.Register("notHideSubtitle", typeof(bool), typeof(Danmaku), new PropertyMetadata(false));
+        public static readonly DependencyProperty NotHideSubtitleProperty =
+            DependencyProperty.Register(nameof(NotHideSubtitle), typeof(bool), typeof(Danmaku), new PropertyMetadata(false));
 
 
         public void InitializeDanmaku(DanmakuMode mode, double fontZoom, int _speed, DanmakuBorderStyle style)
         {
-            sizeZoom = fontZoom;
-            speed = _speed;
-
-            borderStyle = style;
+            SizeZoom = fontZoom;
+            Speed = _speed;
+            BorderStyle = style;
             SetRows();
         }
 
@@ -322,7 +311,6 @@ namespace NSDanmaku.Controls
             grid_Bottom.Children.Clear();
             grid_Top.Children.Clear();
             grid_Roll.Children.Clear();
-
         }
 
         private TextBlock CreateControlTextBlock(DanmakuModel model)
@@ -330,17 +318,17 @@ namespace NSDanmaku.Controls
             TextBlock tx = new TextBlock();
 
             tx.Text = model.text;
-            if (bold)
+            if (Bold)
             {
                 tx.FontWeight = FontWeights.Bold;
             }
-            if (!string.IsNullOrEmpty(font))
+            if (!string.IsNullOrEmpty(Font))
             {
-                tx.FontFamily = new FontFamily(font);
+                tx.FontFamily = new FontFamily(Font);
             }
             tx.Foreground = new SolidColorBrush(model.color);
             //弹幕大小
-            tx.FontSize = model.size * sizeZoom;
+            tx.FontSize = model.size * SizeZoom;
 
             return tx;
         }
@@ -405,54 +393,49 @@ namespace NSDanmaku.Controls
         }
         private async Task<Grid> CreateControlBorder2(DanmakuModel model)
         {
-
-            float size = (float)model.size * (float)sizeZoom;
+            float size = (float)model.size * (float)SizeZoom;
 
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasTextFormat fmt = new CanvasTextFormat() { FontSize = size };
-            if (bold)
+            if (Bold)
             {
                 fmt.FontWeight = FontWeights.Bold;
             }
-            if (font != "")
+            if (!string.IsNullOrEmpty(Font))
             {
-                fmt.FontFamily = font;
+                fmt.FontFamily = Font;
             }
-            var myBitmap = new CanvasRenderTarget(device, model.text.Length * size, 34, 96);
-
-            CanvasTextLayout canvasTextLayout = new CanvasTextLayout(device, model.text, fmt, model.text.Length * size, 0);
-
-            CanvasGeometry combinedGeometry = CanvasGeometry.CreateText(canvasTextLayout);
-
-            using (var ds = myBitmap.CreateDrawingSession())
+            using (var myBitmap = new CanvasRenderTarget(device, model.text.Length * size, 34, 96))
             {
+                CanvasTextLayout canvasTextLayout = new CanvasTextLayout(device, model.text, fmt, model.text.Length * size, 0);
 
-                ds.FillGeometry(combinedGeometry, model.color);
-                ds.DrawGeometry(combinedGeometry, SetBorder(model.color), 1.0f);
+                CanvasGeometry combinedGeometry = CanvasGeometry.CreateText(canvasTextLayout);
 
+                using (var ds = myBitmap.CreateDrawingSession())
+                {
 
+                    ds.FillGeometry(combinedGeometry, model.color);
+                    ds.DrawGeometry(combinedGeometry, SetBorder(model.color), 1.0f);
+                }
+                Image image = new Image();
+                BitmapImage im = new BitmapImage();
+                using (InMemoryRandomAccessStream oStream = new InMemoryRandomAccessStream())
+                {
+                    // Save the Win2D canvas renderer a stream.
+                    await myBitmap.SaveAsync(oStream, CanvasBitmapFileFormat.Png, 1.0f);
+                    // Stream our Win2D pixels into the Bitmap
+                    await im.SetSourceAsync(oStream);
+                }
+                image.Source = im;
+                image.Stretch = Stretch.None;
+                Grid grid = new Grid();
+
+                grid.Tag = model;
+                grid.Children.Add(image);
+
+                return grid;
             }
-            Image image = new Image();
-            BitmapImage im = new BitmapImage();
-            using (InMemoryRandomAccessStream oStream = new InMemoryRandomAccessStream())
-            {
-                // Save the Win2D canvas renderer a stream.
-                await myBitmap.SaveAsync(oStream, CanvasBitmapFileFormat.Png, 1.0f);
-                // Stream our Win2D pixels into the Bitmap
-                await im.SetSourceAsync(oStream);
-            }
-            image.Source = im;
-            image.Stretch = Stretch.None;
-            Grid grid = new Grid();
-
-            grid.Tag = model;
-            grid.Children.Add(image);
-
-            return grid;
-
         }
-
-
 
         private Color SetBorder(Color textColor)
         {
@@ -460,15 +443,15 @@ namespace NSDanmaku.Controls
             {
                 return Colors.White;
             }
-            else if ((textColor.R > 200 && textColor.G < 100 && textColor.B < 100))
+            else if (textColor.R > 200 && textColor.G < 100 && textColor.B < 100)
             {
                 return Colors.White;
             }
-            else if ((textColor.R < 100 && textColor.G > 200 && textColor.B < 100))
+            else if (textColor.R < 100 && textColor.G > 200 && textColor.B < 100)
             {
                 return Colors.White;
             }
-            else if ((textColor.R < 100 && textColor.G < 100 && textColor.B > 200))
+            else if (textColor.R < 100 && textColor.G < 100 && textColor.B > 200)
             {
                 return Colors.White;
             }
@@ -487,7 +470,7 @@ namespace NSDanmaku.Controls
                 SetRows();
                 max = grid_Top.RowDefinitions.Count;
             }
-            if (notHideSubtitle)
+            if (NotHideSubtitle)
             {
                 max -= 3;
             }
@@ -513,11 +496,11 @@ namespace NSDanmaku.Controls
                 SetRows();
                 max = grid_Bottom.RowDefinitions.Count;
             }
-            if (notHideSubtitle)
+            if (NotHideSubtitle)
             {
                 max -= 3;
             }
-            for (int i = max - 1; i >= currentBottomRow; i++)
+            for (int i = max - 1; i >= currentBottomRow; i--)
             {
                 var last = grid_Bottom.Children.LastOrDefault(x => Grid.GetRow(x as Grid) == i) as Grid;
                 if (last == null)
@@ -544,7 +527,7 @@ namespace NSDanmaku.Controls
                 SetRows();
                 max = grid_Roll.RowDefinitions.Count;
             }
-            if (notHideSubtitle)
+            if (NotHideSubtitle)
             {
                 max -= 3;
             }
@@ -569,7 +552,7 @@ namespace NSDanmaku.Controls
         public async void AddRollDanmu(DanmakuModel m, bool own)
         {
             Grid grid = null;
-            switch (borderStyle)
+            switch (BorderStyle)
             {
                 case DanmakuBorderStyle.Default:
                     grid = CreateControlBorder(m);
@@ -607,7 +590,7 @@ namespace NSDanmaku.Controls
             grid.RenderTransform = moveTransform;
 
             //创建动画
-            Duration duration = new Duration(TimeSpan.FromSeconds(speed));
+            Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
             DoubleAnimation myDoubleAnimationX = new DoubleAnimation();
             myDoubleAnimationX.Duration = duration;
             //创建故事版
@@ -653,7 +636,7 @@ namespace NSDanmaku.Controls
             grid.RenderTransform = moveTransform;
 
             //创建动画
-            Duration duration = new Duration(TimeSpan.FromSeconds(speed));
+            Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
             DoubleAnimation myDoubleAnimationX = new DoubleAnimation();
             myDoubleAnimationX.Duration = duration;
             //创建故事版
@@ -696,7 +679,7 @@ namespace NSDanmaku.Controls
                 size = 25
             };
             Grid grid = null;
-            switch (borderStyle)
+            switch (BorderStyle)
             {
                 case DanmakuBorderStyle.Default:
                     grid = CreateControlBorder(m);
@@ -734,7 +717,7 @@ namespace NSDanmaku.Controls
             grid.RenderTransform = moveTransform;
 
             //创建动画
-            Duration duration = new Duration(TimeSpan.FromSeconds(speed));
+            Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
             DoubleAnimation myDoubleAnimationX = new DoubleAnimation();
             myDoubleAnimationX.Duration = duration;
             //创建故事版
@@ -764,7 +747,7 @@ namespace NSDanmaku.Controls
         {
 
             Grid grid = null;
-            switch (borderStyle)
+            switch (BorderStyle)
             {
                 case DanmakuBorderStyle.Default:
                     grid = CreateControlBorder(m);
@@ -830,7 +813,7 @@ namespace NSDanmaku.Controls
         public async void AddBottomDanmu(DanmakuModel m, bool own)
         {
             Grid grid = null;
-            switch (borderStyle)
+            switch (BorderStyle)
             {
                 case DanmakuBorderStyle.Default:
                     grid = CreateControlBorder(m);
@@ -898,7 +881,7 @@ namespace NSDanmaku.Controls
             tx2.FontWeight = FontWeights.Bold;
             tx.Foreground = new SolidColorBrush(model.color);
             //弹幕大小
-            double size = model.size * sizeZoom;
+            double size = model.size * SizeZoom;
             tx.FontSize = size;
             tx2.FontSize = size;
 
@@ -958,9 +941,6 @@ namespace NSDanmaku.Controls
                 grid.Projection = projection;
             }
 
-            //Canvas.SetLeft(grid, toX);
-            //Canvas.SetTop(grid, toY);
-
             canvas.Children.Add(grid);
 
 
@@ -972,9 +952,6 @@ namespace NSDanmaku.Controls
             //创建故事版
             Storyboard moveStoryboard = new Storyboard();
 
-
-            //if (X != toX || Y != toY)
-            //{
             Duration duration = new Duration(TimeSpan.FromMilliseconds(dur));
             {
                 DoubleAnimation myDoubleAnimationY = new DoubleAnimation();
@@ -996,12 +973,6 @@ namespace NSDanmaku.Controls
                 Storyboard.SetTargetProperty(myDoubleAnimationX, "(Canvas.Left)");
                 moveStoryboard.Children.Add(myDoubleAnimationX);
             }
-            //}
-            //else
-            //{
-            //    Canvas.SetTop(grid,toY);
-            //    Canvas.SetLeft(grid,toX);
-            //}
 
             //透明度动画 
             DoubleAnimation opacityAnimation = new DoubleAnimation()

@@ -8,14 +8,14 @@
 
   <Identity
     Name="8637eda3-b54b-4197-b22e-89aa28fdc89f"
-    Publisher="CN=xiaoyaocz"
+    Publisher="CN=Berrysoft"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="8637eda3-b54b-4197-b22e-89aa28fdc89f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Demo</DisplayName>
-    <PublisherDisplayName>xiaoyaocz</PublisherDisplayName>
+    <PublisherDisplayName>Berrysoft</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
