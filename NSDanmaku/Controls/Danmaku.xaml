@@ -8,22 +8,11 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-
-    <Grid x:Name="gv">
-        <TextBlock x:Name="tb_test" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="25" Foreground="White"></TextBlock>
-        <Canvas x:Name="canvas">
-         
-        </Canvas>
-        <Grid x:Name="grid_Roll" >
-
-        </Grid>
-        <Grid x:Name="grid_Top" >
-
-        </Grid>
-
-        <Grid x:Name="grid_Bottom" >
-
-        </Grid>
-      
+    <Grid x:Name="MainGrid">
+        <TextBlock x:Name="TestBlock" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="25" Foreground="Transparent">TEST</TextBlock>
+        <Canvas x:Name="PositionCanvas"/>
+        <Grid x:Name="RollGrid"/>
+        <Grid x:Name="TopGrid"/>
+        <Grid x:Name="BottomGrid"/>
     </Grid>
 </UserControl>
