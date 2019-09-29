@@ -17,26 +17,26 @@ namespace NSDanmaku.Controls
         public event EventHandler<List<DanmakuModel>> ReturnDanmakus;
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (list_Items.SelectedItem == null)
+            if (ResultView.SelectedItem == null)
             {
                 args.Cancel = true;
                 return;
             }
-            var data = list_Items.SelectedItem as Episodes;
-            ReturnDanmakus(null, await TanTanPlay.GetDanmakus(data.EpisodeId));
+            var data = ResultView.SelectedItem as Episodes;
+            ReturnDanmakus?.Invoke(null, await TanTanPlay.GetDanmakus(data.EpisodeId));
         }
 
-        private async void txt_search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private async void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            txt_error.Visibility = Visibility.Collapsed;
-            if (txt_search.Text.Length == 0)
+            ErrorBlock.Visibility = Visibility.Collapsed;
+            if (SearchBox.Text.Length == 0)
             {
                 ShowError("请输入关键字");
                 return;
             }
             try
             {
-                list_Items.ItemsSource = await TanTanPlay.Search(txt_search.Text);
+                ResultView.ItemsSource = await TanTanPlay.Search(SearchBox.Text);
             }
             catch (Exception ex)
             {
@@ -46,8 +46,8 @@ namespace NSDanmaku.Controls
 
         private void ShowError(string msg)
         {
-            txt_error.Visibility = Visibility.Visible;
-            txt_error.Text = msg;
+            ErrorBlock.Visibility = Visibility.Visible;
+            ErrorBlock.Text = msg;
         }
     }
 }

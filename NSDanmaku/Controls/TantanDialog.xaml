@@ -15,22 +15,22 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <AutoSuggestBox x:Name="txt_search" QuerySubmitted="txt_search_QuerySubmitted" QueryIcon="Find" PlaceholderText="输入关键字搜索"></AutoSuggestBox>
+        <AutoSuggestBox x:Name="SearchBox" QuerySubmitted="SearchBox_QuerySubmitted" QueryIcon="Find" PlaceholderText="输入关键字搜索"/>
         <ScrollViewer Grid.Row="1" Height="240" MaxWidth="340">
             <StackPanel>
-                <TextBlock Foreground="Red" x:Name="txt_error" Visibility="Collapsed"></TextBlock>
-                <ListView x:Name="list_Items" Header="搜索结果" SelectionMode="Single"  ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <TextBlock x:Name="ErrorBlock" Foreground="Red" Visibility="Collapsed"/>
+                <ListView x:Name="ResultView" Header="搜索结果" SelectionMode="Single" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                            <Setter Property="Padding" Value="0"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="0"/>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Foreground="Gray" FontSize="14" Text="{Binding animeTitle}"></TextBlock>
-                                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding episodeTitle}"></TextBlock>
+                                <TextBlock Foreground="Gray" FontSize="14" Text="{Binding animeTitle}"/>
+                                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding episodeTitle}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
