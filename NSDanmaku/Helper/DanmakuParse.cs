@@ -1,55 +1,34 @@
-﻿using NSDanmaku.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using NSDanmaku.Model;
 using Windows.Storage;
+using Windows.UI;
 
 namespace NSDanmaku.Helper
 {
-    public class DanmakuParse
+    public static class DanmakuParse
     {
-        public async Task<List<NSDanmaku.Model.DanmakuModel>> ParseBiliBili(long cid)
-        {
-            WebHelper webHelper = new WebHelper();
-            string danmuStr = await webHelper.GetResults(new Uri(string.Format("https://api.bilibili.com/x/v1/dm/list.so?oid={0}", cid)));
-            return ParseBiliBiliXml(danmuStr);
-        }
+        public static Task<string> GetBiliBili(long cid) => WebHelper.GetResults(new Uri($"https://api.bilibili.com/x/v1/dm/list.so?oid={cid}"));
 
-        public async Task<string> GetBiliBili(long cid)
-        {
+        public static async Task<List<DanmakuModel>> ParseBiliBili(long cid) => ParseBiliBiliXml(await GetBiliBili(cid));
 
-            WebHelper webHelper = new WebHelper();
-            string danmuStr = await webHelper.GetResults(new Uri(string.Format("https://api.bilibili.com/x/v1/dm/list.so?oid={0}", cid)));
-            return danmuStr;
-        }
+        public static List<DanmakuModel> ParseBiliBili(string xml) => ParseBiliBiliXml(xml);
 
+        public static async Task<List<DanmakuModel>> ParseBiliBili(Uri url) => ParseBiliBiliXml(await WebHelper.GetResults(url));
 
-        public List<NSDanmaku.Model.DanmakuModel> ParseBiliBili(string xml)
-        {
-            return ParseBiliBiliXml(xml);
-        }
-        public async Task<List<NSDanmaku.Model.DanmakuModel>> ParseBiliBili(Uri url)
-        {
-            WebHelper webHelper = new WebHelper();
-            string danmuStr = await webHelper.GetResults(url);
-            return ParseBiliBiliXml(danmuStr);
-        }
-        public async Task< List<NSDanmaku.Model.DanmakuModel>> ParseBiliBili(Windows.Storage.StorageFile file)
-        {
-            string danmuStr = await FileIO.ReadTextAsync(file);
-            return  ParseBiliBiliXml(danmuStr);
-        }
-        private List<NSDanmaku.Model.DanmakuModel> ParseBiliBiliXml(string xmlStr)
+        public static async Task<List<DanmakuModel>> ParseBiliBili(StorageFile file) => ParseBiliBiliXml(await FileIO.ReadTextAsync(file));
+
+        private static List<DanmakuModel> ParseBiliBiliXml(string xmlStr)
         {
             List<DanmakuModel> ls = new List<DanmakuModel>();
-          
+
             XmlDocument xdoc = new XmlDocument();
             //处理下特殊字符
-            xmlStr = Regex.Replace(xmlStr, @"[\x00-\x08]|[\x0B-\x0C]|[\x0E-\x1F]", "");
+            xmlStr = Regex.Replace(xmlStr, @"[\x00-\x08]|[\x0B-\x0C]|[\x0E-\x1F]", string.Empty);
             xdoc.LoadXml(xmlStr);
             XmlElement el = xdoc.DocumentElement;
             XmlNodeList xml = el.ChildNodes;
@@ -77,12 +56,15 @@ namespace NSDanmaku.Helper
                                 location = DanmakuLocation.Roll;
                                 break;
                         }
+                        var colorCode = int.Parse(haha[3]);
+                        if (colorCode < 0x1000000)
+                            colorCode |= unchecked((int)0xFF000000);
                         ls.Add(new DanmakuModel
                         {
                             Time = double.Parse(haha[0]),
                             Location = location,
                             Size = double.Parse(haha[2]),
-                            Color = haha[3].ToColor(),
+                            Color = Color.FromArgb((byte)((colorCode >> 24) & 0xFF), (byte)((colorCode >> 16) & 0xFF), (byte)((colorCode >> 8) & 0xFF), (byte)(colorCode & 0xFF)),
                             SendTime = haha[4],
                             Pool = haha[5],
                             SendID = haha[6],
@@ -92,14 +74,13 @@ namespace NSDanmaku.Helper
                             FromSite = DanmakuSite.Bilibili
                         });
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        Debug.WriteLine(ex);
                     }
-
                 }
             }
             return ls;
-
         }
     }
 }

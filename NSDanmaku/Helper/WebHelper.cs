@@ -9,9 +9,9 @@ using Windows.Web.Http.Filters;
 
 namespace NSDanmaku.Helper
 {
-    class WebHelper
+    static class WebHelper
     {
-        public  async Task<string> GetResults(Uri url)
+        public static async Task<string> GetResults(Uri url)
         {
             HttpBaseProtocolFilter fiter = new HttpBaseProtocolFilter();
             fiter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Expired);
@@ -20,11 +20,9 @@ namespace NSDanmaku.Helper
                 HttpResponseMessage hr = await hc.GetAsync(url);
                 hr.EnsureSuccessStatusCode();
                 var encodeResults = await hr.Content.ReadAsBufferAsync();
-                string results = Encoding.UTF8.GetString(encodeResults.ToArray(), 0, encodeResults.ToArray().Length);
+                string results = Encoding.UTF8.GetString(encodeResults.ToArray());
                 return results;
             }
         }
-
-
     }
 }

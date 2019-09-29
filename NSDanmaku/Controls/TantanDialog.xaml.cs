@@ -9,12 +9,11 @@ namespace NSDanmaku.Controls
 {
     public sealed partial class TantanDialog : ContentDialog
     {
-        TanTanPlay tantan;
         public TantanDialog()
         {
             this.InitializeComponent();
-            tantan = new TanTanPlay();
         }
+
         public event EventHandler<List<DanmakuModel>> ReturnDanmakus;
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
@@ -24,7 +23,7 @@ namespace NSDanmaku.Controls
                 return;
             }
             var data = list_Items.SelectedItem as Episodes;
-            ReturnDanmakus(null, await tantan.GetDanmakus(data.EpisodeId));
+            ReturnDanmakus(null, await TanTanPlay.GetDanmakus(data.EpisodeId));
         }
 
         private async void txt_search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
@@ -37,7 +36,7 @@ namespace NSDanmaku.Controls
             }
             try
             {
-                list_Items.ItemsSource = await tantan.Search(txt_search.Text);
+                list_Items.ItemsSource = await TanTanPlay.Search(txt_search.Text);
             }
             catch (Exception ex)
             {

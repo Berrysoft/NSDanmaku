@@ -1,32 +1,25 @@
-﻿using NSDanmaku.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NSDanmaku.Model;
+using Windows.UI;
 
 namespace NSDanmaku.Helper
 {
     /// <summary>
     /// 弹弹Play相关API操作
     /// </summary>
-    public class TanTanPlay
+    public static class TanTanPlay
     {
-        public TanTanPlay()
-        {
-            webHelper = new WebHelper();
-        }
-        WebHelper webHelper;
         /// <summary>
         /// 通过关键字搜索弹弹Play上的剧集
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public async Task<List<Episodes>> Search(string keyword)
+        public static async Task<List<Episodes>> Search(string keyword)
         {
-
-            var results = await webHelper.GetResults(new Uri("https://api.acplay.net/api/v2/search/episodes?anime=" + Uri.EscapeDataString(keyword)));
+            var results = await WebHelper.GetResults(new Uri("https://api.acplay.net/api/v2/search/episodes?anime=" + Uri.EscapeDataString(keyword)));
             var m = JsonConvert.DeserializeObject<TantanSearchModel>(results);
             if (m.Success)
             {
@@ -45,15 +38,13 @@ namespace NSDanmaku.Helper
             {
                 throw new Exception(m.ErrorMessage);
             }
-
         }
 
-
-        public async Task<List<NSDanmaku.Model.DanmakuModel>> GetDanmakus(int episodeId)
+        public static async Task<List<DanmakuModel>> GetDanmakus(int episodeId)
         {
             try
             {
-                var results = await webHelper.GetResults(new Uri("https://api.acplay.net/api/v2/comment/" + episodeId));
+                var results = await WebHelper.GetResults(new Uri("https://api.acplay.net/api/v2/comment/" + episodeId));
                 var m = JsonConvert.DeserializeObject<CommentModel>(results);
                 List<DanmakuModel> list = new List<DanmakuModel>();
                 if (m.Comments != null)
@@ -77,16 +68,19 @@ namespace NSDanmaku.Helper
                                 location = DanmakuLocation.Roll;
                                 break;
                         }
+                        var colorCode = int.Parse(datas[2]);
+                        if (colorCode < 0x1000000)
+                            colorCode |= unchecked((int)0xFF000000);
                         list.Add(new DanmakuModel()
                         {
                             Text = item.Text,
-                            Color = datas[2].ToColor(),
+                            Color = Color.FromArgb((byte)((colorCode >> 24) & 0xFF), (byte)((colorCode >> 16) & 0xFF), (byte)((colorCode >> 8) & 0xFF), (byte)(colorCode & 0xFF)),
                             Location = location,
                             FromSite = DanmakuSite.Tantan,
                             RowID = item.Cid.ToString(),
                             Time = Convert.ToDouble(datas[0]),
                             SendID = datas[3],
-                            Size=25
+                            Size = 25
                         });
                     }
                     return list;
@@ -98,10 +92,8 @@ namespace NSDanmaku.Helper
             }
             catch (Exception)
             {
-
                 return new List<DanmakuModel>();
             }
-           
         }
     }
 }

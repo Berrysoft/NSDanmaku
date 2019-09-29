@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using NSDanmaku.Helper;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -92,8 +93,7 @@ namespace Demo
             {
                 try
                 {
-                    NSDanmaku.Helper.DanmakuParse danmakuParse = new NSDanmaku.Helper.DanmakuParse();
-                    danmakus = await danmakuParse.ParseBiliBili(29892777);
+                    danmakus = await DanmakuParse.ParseBiliBili(29892777);
                 }
                 catch (Exception)
                 {

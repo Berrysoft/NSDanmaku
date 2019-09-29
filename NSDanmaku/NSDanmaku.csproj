@@ -114,7 +114,6 @@
     </Compile>
     <Compile Include="Helper\DanmakuParse.cs" />
     <Compile Include="Helper\TanTanPlay.cs" />
-    <Compile Include="Helper\Utils.cs" />
     <Compile Include="Helper\WebHelper.cs" />
     <Compile Include="Model\DanmakuModel.cs" />
     <Compile Include="Model\TantanModel.cs" />
