@@ -23,19 +23,19 @@ namespace NSDanmaku.Helper
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public async Task<List<episodes>> Search(string keyword)
+        public async Task<List<Episodes>> Search(string keyword)
         {
 
             var results = await webHelper.GetResults(new Uri("https://api.acplay.net/api/v2/search/episodes?anime=" + Uri.EscapeDataString(keyword)));
             var m = JsonConvert.DeserializeObject<TantanSearchModel>(results);
-            if (m.success)
+            if (m.Success)
             {
-                List<episodes> episodes = new List<episodes>();
-                foreach (var item in m.animes)
+                List<Episodes> episodes = new List<Episodes>();
+                foreach (var item in m.Animes)
                 {
-                    foreach (var item1 in item.episodes)
+                    foreach (var item1 in item.Episodes)
                     {
-                        item1.animeTitle = item.animeTitle;
+                        item1.AnimeTitle = item.AnimeTitle;
                         episodes.Add(item1);
                     }
                 }
@@ -43,7 +43,7 @@ namespace NSDanmaku.Helper
             }
             else
             {
-                throw new Exception(m.errorMessage);
+                throw new Exception(m.ErrorMessage);
             }
 
         }
@@ -56,11 +56,11 @@ namespace NSDanmaku.Helper
                 var results = await webHelper.GetResults(new Uri("https://api.acplay.net/api/v2/comment/" + episodeId));
                 var m = JsonConvert.DeserializeObject<CommentModel>(results);
                 List<DanmakuModel> list = new List<DanmakuModel>();
-                if (m.comments != null)
+                if (m.Comments != null)
                 {
-                    foreach (var item in m.comments)
+                    foreach (var item in m.Comments)
                     {
-                        var datas = item.p.Split(',');
+                        var datas = item.Time.Split(',');
                         var location = DanmakuLocation.Roll;
                         switch (datas[1])
                         {
@@ -79,14 +79,14 @@ namespace NSDanmaku.Helper
                         }
                         list.Add(new DanmakuModel()
                         {
-                            text = item.m,
-                            color = datas[2].ToColor(),
-                            location = location,
-                            fromSite = DanmakuSite.Tantan,
-                            rowID = item.cid.ToString(),
-                            time = Convert.ToDouble(datas[0]),
-                            sendID = datas[3],
-                            size=25
+                            Text = item.Text,
+                            Color = datas[2].ToColor(),
+                            Location = location,
+                            FromSite = DanmakuSite.Tantan,
+                            RowID = item.Cid.ToString(),
+                            Time = Convert.ToDouble(datas[0]),
+                            SendID = datas[3],
+                            Size=25
                         });
                     }
                     return list;

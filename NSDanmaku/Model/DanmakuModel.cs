@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 namespace NSDanmaku.Model
@@ -51,54 +46,44 @@ namespace NSDanmaku.Model
     }
     public class DanmakuModel
     {
-        public string text { get; set; }
+        public string Text { get; set; }
         /// <summary>
         /// 弹幕大小
         /// </summary>
-        public double size { get; set; }
+        public double Size { get; set; }
         /// <summary>
         /// 弹幕颜色
         /// </summary>
-        public Color color { get; set; }
+        public Color Color { get; set; }
         /// <summary>
         /// 弹幕出现时间
         /// </summary>
-        public double time { get; set; }
+        public double Time { get; set; }
         /// <summary>
         /// 弹幕发送时间
         /// </summary>
-        public string sendTime { get; set; }
+        public string SendTime { get; set; }
         /// <summary>
         /// 弹幕池
         /// </summary>
-        public string pool { get; set; }
+        public string Pool { get; set; }
         /// <summary>
         /// 弹幕发送人ID
         /// </summary>
-        public string sendID { get; set; }
+        public string SendID { get; set; }
         /// <summary>
         /// 弹幕ID
         /// </summary>
-        public string rowID { get; set; }
+        public string RowID { get; set; }
         /// <summary>
         /// 弹幕出现位置
         /// </summary>
-        public DanmakuLocation location
-        {
-            get; set;
-        }
+        public DanmakuLocation Location { get; set; }
 
-        public DanmakuSite fromSite { get; set; }
+        public DanmakuSite FromSite { get; set; }
 
-        public string source { get; set; }
+        public string Source { get; set; }
 
-
-        public SolidColorBrush colorBrush
-        {
-            get
-            {
-                return new SolidColorBrush(color);
-            }
-        }
+        public SolidColorBrush ColorBrush => new SolidColorBrush(Color);
     }
 }

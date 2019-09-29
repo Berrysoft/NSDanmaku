@@ -9,9 +9,7 @@
     Title="匹配弹弹Play弹幕"
     PrimaryButtonText="确定"
     SecondaryButtonText="取消"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -36,7 +34,6 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                   
                 </ListView>
             </StackPanel>
         </ScrollViewer>

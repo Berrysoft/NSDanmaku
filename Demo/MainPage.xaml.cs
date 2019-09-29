@@ -23,10 +23,10 @@ namespace Demo
         {
             danmaku.AddRollDanmu(new NSDanmaku.Model.DanmakuModel()
             {
-                color = Colors.White,
-                location = NSDanmaku.Model.DanmakuLocation.Roll,
-                size = 25,
-                text = text.Text
+                Color = Colors.White,
+                Location = NSDanmaku.Model.DanmakuLocation.Roll,
+                Size = 25,
+                Text = text.Text
             }, ck_own.IsChecked.Value);
         }
 
@@ -34,10 +34,10 @@ namespace Demo
         {
             danmaku.AddTopDanmu(new NSDanmaku.Model.DanmakuModel()
             {
-                color = Colors.Blue,
-                location = NSDanmaku.Model.DanmakuLocation.Roll,
-                size = 25,
-                text = text.Text
+                Color = Colors.Blue,
+                Location = NSDanmaku.Model.DanmakuLocation.Roll,
+                Size = 25,
+                Text = text.Text
             }, ck_own.IsChecked.Value);
         }
 
@@ -45,10 +45,10 @@ namespace Demo
         {
             danmaku.AddBottomDanmu(new NSDanmaku.Model.DanmakuModel()
             {
-                color = Colors.Red,
-                location = NSDanmaku.Model.DanmakuLocation.Roll,
-                size = 25,
-                text = text.Text
+                Color = Colors.Red,
+                Location = NSDanmaku.Model.DanmakuLocation.Roll,
+                Size = 25,
+                Text = text.Text
             }, ck_own.IsChecked.Value);
         }
 
@@ -59,12 +59,12 @@ namespace Demo
 
         private void Timer_Tick(object sender, object e)
         {
-            var danmu = danmakus.Where(x => Convert.ToInt32(x.time) == slider.Value);
+            var danmu = danmakus.Where(x => Convert.ToInt32(x.Time) == slider.Value);
             foreach (var item in danmu)
             {
                 try
                 {
-                    switch (item.location)
+                    switch (item.Location)
                     {
                         case NSDanmaku.Model.DanmakuLocation.Top:
                             danmaku.AddTopDanmu(item, false);
@@ -79,7 +79,7 @@ namespace Demo
                 }
                 catch (Exception)
                 {
-                    Debug.WriteLine("Can't add danmaku:" + item.source);
+                    Debug.WriteLine("Can't add danmaku:" + item.Source);
                 }
 
             }

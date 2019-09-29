@@ -1,20 +1,9 @@
-﻿using NSDanmaku.Helper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using NSDanmaku.Helper;
+using NSDanmaku.Model;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“内容对话框”项模板
 
 namespace NSDanmaku.Controls
 {
@@ -26,26 +15,22 @@ namespace NSDanmaku.Controls
             this.InitializeComponent();
             tantan = new TanTanPlay();
         }
-        public event EventHandler<List<NSDanmaku.Model.DanmakuModel>> ReturnDanmakus;
+        public event EventHandler<List<DanmakuModel>> ReturnDanmakus;
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (list_Items.SelectedItem==null)
+            if (list_Items.SelectedItem == null)
             {
                 args.Cancel = true;
                 return;
             }
-            var data = list_Items.SelectedItem as Model.episodes;
-            ReturnDanmakus(null,await tantan.GetDanmakus(data.episodeId));
-        }
-
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
+            var data = list_Items.SelectedItem as Episodes;
+            ReturnDanmakus(null, await tantan.GetDanmakus(data.EpisodeId));
         }
 
         private async void txt_search_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             txt_error.Visibility = Visibility.Collapsed;
-            if (txt_search.Text.Length==0)
+            if (txt_search.Text.Length == 0)
             {
                 ShowError("请输入关键字");
                 return;
@@ -62,10 +47,8 @@ namespace NSDanmaku.Controls
 
         private void ShowError(string msg)
         {
-            txt_error.Visibility = Visibility.Visible ;
+            txt_error.Visibility = Visibility.Visible;
             txt_error.Text = msg;
         }
-
-
     }
 }

@@ -1,42 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NSDanmaku.Model
 {
     public class TantanSearchModel
     {
-        public bool success { get; set; }
-        public string errorMessage { get; set; }
-        public int errorCode { get; set; }
-        public bool hasMore { get; set; }
-        public List<animes> animes { get; set; }
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+        [JsonProperty("errorMessage")]
+        public string ErrorMessage { get; set; }
+        [JsonProperty("errorCode")]
+        public int ErrorCode { get; set; }
+        [JsonProperty("hasMore")]
+        public bool HasMore { get; set; }
+        [JsonProperty("animes")]
+        public List<Animes> Animes { get; set; }
     }
-    public class animes
+    public class Animes
     {
-        public int animeId { get; set; }
-        public string animeTitle { get; set; }
-        public int type { get; set; }
-        public List<episodes> episodes { get; set; }
+        [JsonProperty("animeId")]
+        public int AnimeId { get; set; }
+        [JsonProperty("animeTitle")]
+        public string AnimeTitle { get; set; }
+        [JsonProperty("type")]
+        public int Type { get; set; }
+        [JsonProperty("episodes")]
+        public List<Episodes> Episodes { get; set; }
     }
-    public class episodes
+    public class Episodes
     {
-        public int episodeId { get; set; }
-        public string episodeTitle { get; set; }
-        public string animeTitle { get; set; }
+        [JsonProperty("episodeId")]
+        public int EpisodeId { get; set; }
+        [JsonProperty("episodeTitle")]
+        public string EpisodeTitle { get; set; }
+        [JsonProperty("animeTitle")]
+        public string AnimeTitle { get; set; }
     }
 
     public class CommentModel
     {
-        public int count { get; set; }
-        public List<comments> comments { get; set; }
+        [JsonProperty("count")]
+        public int Count { get; set; }
+        [JsonProperty("comments")]
+        public List<Comments> Comments { get; set; }
     }
-    public class comments
+    public class Comments
     {
-        public long cid { get; set; }
-        public string m { get; set; }
-        public string p { get; set; }
+        [JsonProperty("cid")]
+        public long Cid { get; set; }
+        [JsonProperty("m")]
+        public string Text { get; set; }
+        [JsonProperty("p")]
+        public string Time { get; set; }
     }
 }

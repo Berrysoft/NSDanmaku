@@ -79,17 +79,17 @@ namespace NSDanmaku.Helper
                         }
                         ls.Add(new DanmakuModel
                         {
-                            time = double.Parse(haha[0]),
-                            location = location,
-                            size = double.Parse(haha[2]),
-                            color = haha[3].ToColor(),
-                            sendTime = haha[4],
-                            pool = haha[5],
-                            sendID = haha[6],
-                            rowID = haha[7],
-                            text = item.InnerText,
-                            source = item.OuterXml,
-                            fromSite = DanmakuSite.Bilibili
+                            Time = double.Parse(haha[0]),
+                            Location = location,
+                            Size = double.Parse(haha[2]),
+                            Color = haha[3].ToColor(),
+                            SendTime = haha[4],
+                            Pool = haha[5],
+                            SendID = haha[6],
+                            RowID = haha[7],
+                            Text = item.InnerText,
+                            Source = item.OuterXml,
+                            FromSite = DanmakuSite.Bilibili
                         });
                     }
                     catch (Exception)

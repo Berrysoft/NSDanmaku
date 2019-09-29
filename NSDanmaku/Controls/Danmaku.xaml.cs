@@ -66,7 +66,7 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.Size) * SizeZoom;
                     }
                 }
             }
@@ -78,7 +78,7 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.Size) * SizeZoom;
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace NSDanmaku.Controls
                 {
                     if (tb is TextBlock)
                     {
-                        (tb as TextBlock).FontSize = Convert.ToInt32(m.size) * SizeZoom;
+                        (tb as TextBlock).FontSize = Convert.ToInt32(m.Size) * SizeZoom;
                     }
                 }
             }
@@ -269,7 +269,7 @@ namespace NSDanmaku.Controls
 
         public void Remove(DanmakuModel danmaku)
         {
-            switch (danmaku.location)
+            switch (danmaku.Location)
             {
                 case DanmakuLocation.Top:
 
@@ -317,7 +317,7 @@ namespace NSDanmaku.Controls
         {
             TextBlock tx = new TextBlock();
 
-            tx.Text = model.text;
+            tx.Text = model.Text;
             if (Bold)
             {
                 tx.FontWeight = FontWeights.Bold;
@@ -326,9 +326,9 @@ namespace NSDanmaku.Controls
             {
                 tx.FontFamily = new FontFamily(Font);
             }
-            tx.Foreground = new SolidColorBrush(model.color);
+            tx.Foreground = new SolidColorBrush(model.Color);
             //弹幕大小
-            tx.FontSize = model.size * SizeZoom;
+            tx.FontSize = model.Size * SizeZoom;
 
             return tx;
         }
@@ -343,7 +343,7 @@ namespace NSDanmaku.Controls
                 ShadowOpacity = 1,
                 OffsetX = 0,
                 OffsetY = 0,
-                Color = SetBorder(model.color)
+                Color = SetBorder(model.Color)
             };
 
             Grid grid = new Grid();
@@ -361,7 +361,7 @@ namespace NSDanmaku.Controls
             TextBlock tx2 = CreateControlTextBlock(model);
             Grid grid = new Grid();
 
-            tx2.Foreground = new SolidColorBrush(SetBorder(model.color));
+            tx2.Foreground = new SolidColorBrush(SetBorder(model.Color));
             //grid包含弹幕文本信息
 
             grid.Children.Add(tx2);
@@ -386,14 +386,14 @@ namespace NSDanmaku.Controls
             Image img = new Image();
             img.Source = image;
             Grid grid = new Grid();
-            DanmakuModel model = new DanmakuModel() { text = "666666" };
+            DanmakuModel model = new DanmakuModel() { Text = "666666" };
             grid.Tag = model;
             grid.Children.Add(img);
             return grid;
         }
         private async Task<Grid> CreateControlBorder2(DanmakuModel model)
         {
-            float size = (float)model.size * (float)SizeZoom;
+            float size = (float)model.Size * (float)SizeZoom;
 
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasTextFormat fmt = new CanvasTextFormat() { FontSize = size };
@@ -405,17 +405,17 @@ namespace NSDanmaku.Controls
             {
                 fmt.FontFamily = Font;
             }
-            using (var myBitmap = new CanvasRenderTarget(device, model.text.Length * size, 34, 96))
+            using (var myBitmap = new CanvasRenderTarget(device, model.Text.Length * size, 34, 96))
             {
-                CanvasTextLayout canvasTextLayout = new CanvasTextLayout(device, model.text, fmt, model.text.Length * size, 0);
+                CanvasTextLayout canvasTextLayout = new CanvasTextLayout(device, model.Text, fmt, model.Text.Length * size, 0);
 
                 CanvasGeometry combinedGeometry = CanvasGeometry.CreateText(canvasTextLayout);
 
                 using (var ds = myBitmap.CreateDrawingSession())
                 {
 
-                    ds.FillGeometry(combinedGeometry, model.color);
-                    ds.DrawGeometry(combinedGeometry, SetBorder(model.color), 1.0f);
+                    ds.FillGeometry(combinedGeometry, model.Color);
+                    ds.DrawGeometry(combinedGeometry, SetBorder(model.Color), 1.0f);
                 }
                 Image image = new Image();
                 BitmapImage im = new BitmapImage();
@@ -517,7 +517,7 @@ namespace NSDanmaku.Controls
         private int ComputeRollRow(Grid item)
         {
             double num = 0.8;
-            if ((item.Tag as DanmakuModel).text.Length > 15)
+            if ((item.Tag as DanmakuModel).Text.Length > 15)
             {
                 num = 0.6;
             }
@@ -571,7 +571,7 @@ namespace NSDanmaku.Controls
             }
             if (own)
             {
-                grid.BorderBrush = new SolidColorBrush(m.color);
+                grid.BorderBrush = new SolidColorBrush(m.Color);
                 grid.BorderThickness = new Thickness(1);
             }
             var r = ComputeRollRow(grid);
@@ -673,10 +673,10 @@ namespace NSDanmaku.Controls
             }
             var m = new DanmakuModel()
             {
-                text = text,
-                color = color.Value,
-                location = DanmakuLocation.Roll,
-                size = 25
+                Text = text,
+                Color = color.Value,
+                Location = DanmakuLocation.Roll,
+                Size = 25
             };
             AddRollDanmu(m, own);
         }
@@ -707,7 +707,7 @@ namespace NSDanmaku.Controls
             }
             if (own)
             {
-                grid.BorderBrush = new SolidColorBrush(m.color);
+                grid.BorderBrush = new SolidColorBrush(m.Color);
                 grid.BorderThickness = new Thickness(1);
             }
 
@@ -773,7 +773,7 @@ namespace NSDanmaku.Controls
             }
             if (own)
             {
-                grid.BorderBrush = new SolidColorBrush(m.color);
+                grid.BorderBrush = new SolidColorBrush(m.Color);
                 grid.BorderThickness = new Thickness(1);
             }
             grid.HorizontalAlignment = HorizontalAlignment.Center;
@@ -808,11 +808,11 @@ namespace NSDanmaku.Controls
 
         public void AddPositionDanmu(DanmakuModel model)
         {
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<object[]>(model.text);
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<object[]>(model.Text);
             //创建基础控件
 
             TextBlock tx2 = new TextBlock();
-            tx2.Foreground = new SolidColorBrush(SetBorder(model.color));
+            tx2.Foreground = new SolidColorBrush(SetBorder(model.Color));
             tx2.Margin = new Thickness(1);
 
             TextBlock tx = new TextBlock();
@@ -820,9 +820,9 @@ namespace NSDanmaku.Controls
 
             tx.FontWeight = FontWeights.Bold;
             tx2.FontWeight = FontWeights.Bold;
-            tx.Foreground = new SolidColorBrush(model.color);
+            tx.Foreground = new SolidColorBrush(model.Color);
             //弹幕大小
-            double size = model.size * SizeZoom;
+            double size = model.Size * SizeZoom;
             tx.FontSize = size;
             tx2.FontSize = size;
 
